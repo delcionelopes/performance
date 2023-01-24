@@ -21,7 +21,7 @@ class OperationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {        
         if(is_null($request->pesquisa)){
             $operations = $this->operation->orderByDesc('id')->paginate(6);
         }else{
@@ -63,7 +63,7 @@ class OperationController extends Controller
             ]);
         }else{
             $data['id'] = $this->autoincOperation();
-            $data['name'] = $request->input('name');
+            $data['name'] = strtoupper($request->input('name'));
             $data['icone'] = $request->input('icone');
             $data['created_at'] = now();
             
@@ -71,6 +71,7 @@ class OperationController extends Controller
             return response()->json([
                 'status' => 200,
                 'operation' => $operation,
+                'message' => 'Registro gravado com sucesso!',
             ]);
         }
     }
@@ -122,7 +123,7 @@ class OperationController extends Controller
         }else{
             $operation = $this->operation->find($id);
             if($operation){            
-            $data['name'] = $request->input('name');
+            $data['name'] = strtoupper($request->input('name'));
             $data['icone'] = $request->input('icone');
             $data['updated_at'] = now();
             
@@ -131,6 +132,7 @@ class OperationController extends Controller
             return response()->json([
                 'status' => 200,
                 'operation' => $ope,
+                'message' => 'Registro atualizado com sucesso!',
             ]);
         }else{
             return response()->json([
