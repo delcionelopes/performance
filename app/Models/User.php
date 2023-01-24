@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'roules_id',
         'avatar',
+        'enabled',
     ];
 
     public function roule(){
