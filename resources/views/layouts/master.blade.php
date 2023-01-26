@@ -30,7 +30,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#!" class="nav-link">Home</a>
+        <a href="{{route('home')}}" class="nav-link">Home</a>
       </li>
       <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">      
@@ -42,17 +42,17 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
             <i class="fas fa-users mr-2"></i> Usuários
-            <span class="float-right text-muted text-sm">3 registros</span>
+            <span id="menu_user" class="float-right text-muted text-sm">registro(s)</span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <a href="{{route('admin.modules.index')}}" class="dropdown-item">
             <i class="fas fa-folder mr-2"></i> Módulos
-            <span class="float-right text-muted text-sm">4 registros</span>
+            <span id="menu_module" class="float-right text-muted text-sm">registro(s)</span>
           </a>
           <div class="dropdown-divider"></div>
           <a href="{{route('admin.operations.index')}}" class="dropdown-item">
             <i class="fas fa-file mr-2"></i> Operações
-            <span class="float-right text-muted text-sm">15 registros</span>
+            <span id="menu_operation" class="float-right text-muted text-sm">registro(s)</span>
           </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
@@ -63,19 +63,7 @@
     </ul>
     
     </ul>
-
-    <!-- SEARCH FORM -->
-    {{-- <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form> --}}
-
+  
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
@@ -704,3 +692,28 @@
 @yield('scripts')
 </body>
 </html>
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){  
+   $.ajaxSetup({
+                    headers:{
+                        'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+   $.ajax({
+    type:'GET',
+    dataType:'json',
+    url:'/master',
+    success:function(response){
+        $('#menu_user').replaceWith('<span id="menu_user" class="float-right text-muted text-sm">'+response.users+' registro(s)</span>');
+        $('#menu_module').replaceWith('<span id="menu_module" class="float-right text-muted text-sm">'+response.modules+' registro(s)</span>');
+        $('#menu_operation').replaceWith('<span id="menu_operation" class="float-right text-muted text-sm">'+response.operations+' registro(s)</span>');
+    }
+
+   });
+  
+});
+
+</script>

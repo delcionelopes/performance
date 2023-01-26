@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\OperationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/master', [HomeController::class, 'master']);
 
    ///grupo admin
     Route::prefix('admin')->name('admin.')->group(function(){
@@ -26,6 +28,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
             Route::get('edit-operation/{id}',[OperationController::class,'edit']);
             Route::put('update-operation/{id}',[OperationController::class,'update']);
             Route::put('add-operation',[OperationController::class,'store']); 
+        });
+        Route::prefix('modules')->name('modules.')->group(function(){
+            Route::get('index',[ModuleController::class,'index'])->name('index');
+            Route::delete('delete-module/{id}',[ModuleController::class,'destroy']);
+            Route::get('edit-module/{id}',[ModuleController::class,'edit']);
+            Route::put('update-module/{id}',[ModuleController::class,'update']);
+            Route::put('add-module',[ModuleController::class,'store']); 
+            Route::get('list-operations/{id}',[ModuleController::class,'listOperations']);
+            Route::put('store-operations/{id}',[ModuleController::class,'storeOperations']); 
         });
 
 

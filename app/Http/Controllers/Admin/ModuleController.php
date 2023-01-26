@@ -57,8 +57,7 @@ class ModuleController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => ['required','max:30'],
-            'icone' => 'required',
-            'operations' => ['required','array','min:1'],
+            'icone' => 'required',         
         ]);
         if($validator->fails()){
             return response()->json([
@@ -67,15 +66,16 @@ class ModuleController extends Controller
             ]);
         }else{
             $data['id'] = $this->autoincModule();
-            $data['name'] = $request->input('name');
+            $data['name'] = strtoupper($request->input('name'));
             $data['icone'] = $request->input('icone');
             $data['created_at'] = now();
             
             $module = $this->module->create($data);
-            $module->operations()->sync($request->input('operations'));
+          
             return response()->json([
                 'status' => 200,
                 'module' => $module,
+                'message' => 'Registro gravado com sucesso!',
             ]);
         }
     }
@@ -99,12 +99,10 @@ class ModuleController extends Controller
      */
     public function edit(int $id)
     {
-        $module = $this->module->find($id);
-        $operations = $module->operations;
+        $module = $this->module->find($id);      
         return response()->json([
             'status' => 200,
-            'module' => $module,
-            'operations' => $operations,
+            'module' => $module,          
         ]);
     }
 
@@ -119,8 +117,7 @@ class ModuleController extends Controller
     {
          $validator = Validator::make($request->all(),[
             'name' => ['required','max:30'],
-            'icone' => 'required',
-            'operations' => ['required','array','min:1'],
+            'icone' => 'required',            
         ]);
         if($validator->fails()){
             return response()->json([
@@ -130,16 +127,17 @@ class ModuleController extends Controller
         }else{
             $module = $this->module->find($id);
             if($module){            
-            $data['name'] = $request->input('name');
+            $data['name'] = strtoupper($request->input('name'));
             $data['icone'] = $request->input('icone');
             $data['updated_at'] = now();
             
             $module->update($data);
             $mod = Module::find($id);
-            $mod->operations()->sync($request->input('operations'));
+           
             return response()->json([
                 'status' => 200,
                 'module' => $mod,
+                'message' => 'Registro atualizado com sucesso!',
             ]);
         }else{
             return response()->json([
@@ -170,6 +168,37 @@ class ModuleController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => 'Registro excluído com sucesso!',
+            ]);
+        }
+    }
+
+    public function listOperations(int $id){
+        $module = $this->module->find($id);
+        $operations = $module->operations;
+        return response()->json([
+            'status' => 200,
+            'module' => $module,
+            'operations' => $operations,
+        ]);
+    }
+
+    public function storeOperations(Request $request, int $id){
+        $validator = Validator::make($request->all(),[
+            'operacoes' => ['required','array','min:1'],
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->errors()->getMessages(),
+            ]);
+        }else{
+
+            $module = $this->module->find($id);
+            $module->operations()->sync($request->operacoes);  
+                     
+            return response()->json([
+                'status' => 200,
+                'message' => 'Operações vinculadas com sucesso!',
             ]);
         }
     }

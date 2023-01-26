@@ -19,7 +19,7 @@ class Operation extends Model
     ];
 
     public function modules(){
-        return $this->belongsToMany(Module::class,'modope','module_id','operation_id');
+        return $this->belongsToMany(Module::class,'modope','operation_id','module_id');
     }
 
     public function authorization(){
