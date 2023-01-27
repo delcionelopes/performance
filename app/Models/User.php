@@ -17,13 +17,18 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+    protected $primaryKey = 'id';
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
         'roules_id',
         'avatar',
         'enabled',
+        'created_at',
+        'updated_at',
     ];
 
     public function roule(){

@@ -19,7 +19,7 @@ class Module extends Model
     ];
 
     public function operations(){
-        return $this->belongsToMany(Operation::class,'modope','module_id','operation_id');
+        return $this->belongsToMany(Operation::class,'modope','module_id','operation_id')->withPivot('id');
     }
 
     public function authorization(){

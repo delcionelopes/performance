@@ -14,6 +14,7 @@ class Authorization extends Model
         'id',
         'modope_operation_id',
         'modope_module_id',
+        'modope_id',
         'roules_id',
         'created_at',
         'updated_at',

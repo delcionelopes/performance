@@ -22,7 +22,7 @@ class Roule extends Model
     }
 
     public function authorization(){
-        return $this->hasMany(Authorization::class);
+        return $this->hasMany(Authorization::class,'id');
     }
 
 

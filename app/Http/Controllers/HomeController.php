@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Authorization;
 use App\Models\Module;
 use App\Models\Operation;
 use App\Models\User;
@@ -12,18 +13,20 @@ class HomeController extends Controller
     private $user;
     private $module;
     private $operation;
+    private $authorization;
   
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(User $user, Module $module, Operation $operation)
+    public function __construct(User $user, Module $module, Operation $operation, Authorization $authorization)
     {
         //$this->middleware('auth');
         $this->user = $user;
         $this->module = $module;
         $this->operation = $operation;
+        $this->authorization = $authorization;
     }
 
     /**
@@ -32,8 +35,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {        
-        return view('home');
+    {     
+        $users = $this->user->with('roule')->orderByDesc('id')->get();
+        return view('dashboard.index',[
+            'users' => $users,
+        ]);
     }
     
     public function master()
@@ -45,6 +51,18 @@ class HomeController extends Controller
             'users' => $users,
             'modules' => $modules,
             'operations' => $operations,
+        ]);
+    }
+
+    public function menuLayout(int $id){
+        $user = $this->user->find($id);
+        $authorizations = $this->authorization
+                               ->with('modules','operations') 
+                               ->whereRoules_id($user->roules_id)
+                               ->get();
+        return response()->json([
+            'user' => $user,
+            'authorizations' => $authorizations,
         ]);
     }
     

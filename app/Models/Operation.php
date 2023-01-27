@@ -19,10 +19,12 @@ class Operation extends Model
     ];
 
     public function modules(){
-        return $this->belongsToMany(Module::class,'modope','operation_id','module_id');
+        return $this->belongsToMany(Module::class,'modope','operation_id','module_id')->withPivot('id');
     }
 
     public function authorization(){
         return $this->hasMany(Authorization::class);
     }
+
+   
 }

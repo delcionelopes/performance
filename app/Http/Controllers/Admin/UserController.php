@@ -28,12 +28,12 @@ class UserController extends Controller
         if(is_null($request->pesquisa)){
             $users = $this->user->orderByDesc('id')->paginate(6);
         }else{
-            $query = $this->user->with('roule')->query()
+            $query = $this->user->query()
                           ->where('name','LIKE','%'.strtoupper($request->pesquisa).'%');
             $users = $query->orderByDesc('id')->paginate(6);
         }
         $roules = $this->roule->all();
-        return view('admin.user.index',[
+        return view('admin.users.index',[
             'users' => $users,
             'roules' => $roules,
         ]);
@@ -60,7 +60,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => ['required','max:50'],
             'email' => ['required','email','unique:users','max:100'],
-            'password' => ['required','min:8','max:10'],
+            'password' => ['required','min:8','max:15'],
             'profile' => ['required','integer'],
         ]);
         if($validator->fails()){
@@ -86,10 +86,12 @@ class UserController extends Controller
             }
 
             $data['id'] = $this->autoincUser();
+            $data['name'] = strtoupper($request->input('name'));
             $data['email'] = $request->input('email');
             $data['password'] = bcrypt($request->input('password'));
             $data['roules_id'] = intval($request->input('profile'));
-            $data['enabled'] = 1;
+            $data['enabled'] = intval($request->input('enabled'));
+            $data['created_at'] = now();
             if($filePath){
                 $data['avatar'] = $filePath;
             }
@@ -100,6 +102,7 @@ class UserController extends Controller
                 'status' => 200,
                 'user' => $user,
                 'roule' => $roule,
+                'message' => 'Registro criado com sucesso!',
             ]);
             
         }
@@ -123,11 +126,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(int $id)
-    {
-        $user = $this->user->with('roule')->find($id);
+    {        
+        $user = $this->user->find($id);            
         return response()->json([
             'status' => 200,
-            'user' => $user,
+            'user' => $user,           
         ]);
     }
 
@@ -142,8 +145,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name' => ['required','max:50'],
-            'email' => ['required','email','unique:users','max:100'],
-            'password' => ['required','min:8','max:10'],
+            'email' => ['required','email','max:100'],
+            'password' => ['required','min:8','max:15'],
             'profile' => ['required','integer'],
         ]);
         if($validator->fails()){
@@ -175,12 +178,14 @@ class UserController extends Controller
                         unlink($tempPath);
                     }
            
-            }            
+            }     
+            $data['name'] = strtoupper($request->input('name'));
             $data['email'] = $request->input('email');
             $data['password'] = bcrypt($request->input('password'));
             $data['enabled'] = intval($request->input('enabled'));
             $data['roules_id'] = intval($request->input('profile'));
-            $data['enabled'] = 1;
+            $data['updated_at'] = now();
+            
             if($filePath){
                 $data['avatar'] = $filePath;
             }
@@ -192,6 +197,7 @@ class UserController extends Controller
                 'status' => 200,
                 'user' => $u,
                 'roule' => $roule,
+                'message' => 'Registro atualizado com sucesso!',
             ]);
         }else{
             return response()->json([
@@ -229,4 +235,19 @@ class UserController extends Controller
         }
         return $codigo+1;
     }
+
+    public function ativoUsuario(Request $request,$id){
+        $ativo = $request->input('ativo');
+        $data = ['enabled' => $ativo];
+        $user = $this->user->find($id);
+        $user->update($data);
+        $u = User::find($id);
+        return response()->json([
+            'user' => $u,
+            'status'=> 200,
+        ]);
+    }
+
+
+
 }

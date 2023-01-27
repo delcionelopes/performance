@@ -438,10 +438,10 @@
             <div class="input-group rounded">            
             <input type="text" name="pesquisa" class="form-control rounded float-left" placeholder="nome do módulo" aria-label="Search"
             aria-describedby="search-addon">
-            <button type="submit" class="pesquisa_btn input-group-text border-0" id="search-addon" style="background: transparent;border: none; white-space: nowrap;" data-html="true" data-placement="bottom" data-toggle="popover" title="Pesquisa<br>Informe e tecle ENTER">
+            <button type="submit" class="pesquisa_btn input-group-text border-0" id="search-addon" style="background: transparent;border: none;">
                 <i class="fas fa-search"></i>
             </button>        
-            <button type="button" class="AddModuleModal_btn input-group-text border-0 animate__animated animate__bounce" style="background: transparent;border: none; white-space: nowrap;" data-html="true" data-placement="top" data-toggle="popover" title="Novo registro">
+            <button type="button" class="AddModuleModal_btn input-group-text border-0 animate__animated animate__bounce" style="background: transparent;border: none;">
                 <i class="fas fa-plus"></i>
             </button>                
             </div>            
