@@ -54,8 +54,8 @@ class HomeController extends Controller
         ]);
     }
 
-    public function menuLayout(int $id){
-        $user = $this->user->find($id);
+    public function menuLayout(){        
+        $user = auth()->user();
         $authorizations = $this->authorization
                                ->with('modules','operations') 
                                ->whereRoules_id($user->roules_id)

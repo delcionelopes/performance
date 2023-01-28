@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\OperationController;
 use App\Http\Controllers\Admin\RouleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+    Auth::routes();
+    Route::group(['middleware' => ['auth']],function(){
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/master', [HomeController::class, 'master']);
-    Route::get('/menulayout/{id}', [HomeController::class, 'menuLayout'])->name('menulayout');
+    Route::get('/menulayout', [HomeController::class, 'menuLayout'])->name('menulayout');
 
    ///grupo admin
     Route::prefix('admin')->name('admin.')->group(function(){
@@ -62,3 +65,8 @@ use Illuminate\Support\Facades\Route;
 
 
     });
+
+});
+
+
+
