@@ -14,6 +14,8 @@ class Operation extends Model
         'id',
         'name',
         'icone',
+        'route',
+        'url',
         'created_at',
         'updated_at',
     ];

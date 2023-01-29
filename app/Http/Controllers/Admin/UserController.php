@@ -86,7 +86,7 @@ class UserController extends Controller
             }
 
             $data['id'] = $this->autoincUser();
-            $data['name'] = strtoupper($request->input('name'));
+            $data['name'] = $request->input('name');
             $data['email'] = $request->input('email');
             $data['password'] = bcrypt($request->input('password'));
             $data['roules_id'] = intval($request->input('profile'));

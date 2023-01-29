@@ -957,7 +957,7 @@ $(document).ready(function(){
                 dataType:'json',
                 data:data,
                 success:function(response){
-                    if(response.status==200){
+                    if(response.status==200){                      
                         $('#listform_errList').replaceWith('<ul id="listform_errList"></ul>');     
                         $('#success_message').replaceWith('<div id="success_message"></div>');              
                         $('#success_message').addClass('alert alert-success');

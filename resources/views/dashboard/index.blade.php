@@ -499,11 +499,11 @@
                       <li>
                         @if($user->avatar)
                         <img src="{{asset('storage/'.$user->avatar)}}" alt="Foto de {{$user->name}}">
-                        <a class="users-list-name" href="{{route('menulayout',['id'=>$user->id])}}">{{$user->name}}</a>
+                        <a class="users-list-name" href="#!">{{$user->name}}</a>
                         <span class="users-list-date">{{$user->roule->name}}</span>
                         @else
                         <img src="{{asset('storage/user.png')}}" alt="user">
-                        <a class="users-list-name" href="{{route('menulayout',['id'=>$user->id])}}">{{$user->name}}</a>
+                        <a class="users-list-name" href="#!">{{$user->name}}</a>
                         <span class="users-list-date">{{$user->roule->name}}</span>
                         @endif
                       </li>

@@ -46,24 +46,22 @@ class HomeController extends Controller
     {
         if($this->user->count()){$users = $this->user->count();}else{$users=0;}        
         if($this->module->count()){$modules = $this->module->count();}else{$modules=0;}
-        if($this->operation->count()){$operations = $this->operation->count();}else{$operations = 0;}        
+        if($this->operation->count()){$operations = $this->operation->count();}else{$operations = 0;}       
+        
+         $user = auth()->user();
+        $authorizations = $this->authorization
+                               ->with('modules','operations','roules') 
+                               ->whereRoules_id($user->roules_id)
+                               ->get();
+
         return response()->json([
             'users' => $users,
             'modules' => $modules,
             'operations' => $operations,
-        ]);
-    }
-
-    public function menuLayout(){        
-        $user = auth()->user();
-        $authorizations = $this->authorization
-                               ->with('modules','operations') 
-                               ->whereRoules_id($user->roules_id)
-                               ->get();
-        return response()->json([
             'user' => $user,
             'authorizations' => $authorizations,
         ]);
     }
+
     
 }

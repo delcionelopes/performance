@@ -19,11 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
     Auth::routes();
-    Route::group(['middleware' => ['auth']],function(){
+    Route::group(['middleware' => ['auth']],function(){ //as rotas abaixo estão sob autenticação
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/master', [HomeController::class, 'master']);
-    Route::get('/menulayout', [HomeController::class, 'menuLayout'])->name('menulayout');
+    Route::get('/master', [HomeController::class, 'master'])->name('master');
 
    ///grupo admin
     Route::prefix('admin')->name('admin.')->group(function(){

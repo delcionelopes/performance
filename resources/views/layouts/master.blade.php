@@ -105,16 +105,16 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img id="imgusuario" src="{{asset('storage/user.png')}}" class="img-circle elevation-2" alt="User Image">
+          <img id="imgusuario" src="{{asset('storage/ajax-loader.gif')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#!" class="nomeusuario d-block"></a>
+          <a href="#!" class="nomeusuario d-block"Aguarde...></a>
         </div>
       </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul id="menuprincipal" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">         
+        <ul id="menuprincipal" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           {{-- <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -242,11 +242,72 @@ $(document).ready(function(){
         $('#menu_user').replaceWith('<span id="menu_user" class="float-right text-muted text-sm">'+response.users+' registro(s)</span>');
         $('#menu_module').replaceWith('<span id="menu_module" class="float-right text-muted text-sm">'+response.modules+' registro(s)</span>');
         $('#menu_operation').replaceWith('<span id="menu_operation" class="float-right text-muted text-sm">'+response.operations+' registro(s)</span>');
+
+        $('.nomeusuario').replaceWith('<a href="#!" class="nome d-block">'+response.user.name+'</a>');
+          var link = "{{asset('')}}"+"storage/";
+          var linkuser = "{{asset('')}}"+"storage/user.png";
+          if(response.user.avatar){
+            $('#imgusuario').replaceWith('<img id="imgusuario" src="'+link+response.user.avatar+'" class="img-circle elevation-2" alt="User Image">');
+          }else{
+            $('#imgusuario').replaceWith('<img id="imgusuario" src="'+linkuser+'" class="img-circle elevation-2" alt="User Image">');
+          }
+         var alfa = "";
+         var beta = "";
+         var limitaMenu = "";
+          $('#menuprincipal').replaceWith('<ul id="menuprincipal" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"></ul>');
+          $.each(response.authorizations,function(key,principal){
+            alfa = '<li id="principal'+principal.modules.id+'" class="nav-item has-treeview">\
+                                        <a href="#" class="nav-link">\
+                                          <i class="nav-icon fas fa-'+principal.modules.icone+'"></i>\
+                                          <p>\
+                                            '+principal.modules.name+'\
+                                            <i class="fas fa-angle-left right"></i>\
+                                          </p>\
+                                        </a>\
+                                        <ul id="modulo'+principal.modules.id+'" class="nav nav-treeview">\
+                                        </ul>\
+                                        </li>';
+            if(alfa!=beta){
+              limitaMenu = limitaMenu+'<li id="principal'+principal.modules.id+'" class="nav-item has-treeview">\
+                                        <a href="#" class="nav-link">\
+                                          <i class="nav-icon fas fa-'+principal.modules.icone+'"></i>\
+                                          <p>\
+                                            '+principal.modules.name+'\
+                                            <i class="fas fa-angle-left right"></i>\
+                                          </p>\
+                                        </a>\
+                                        <ul id="modulo'+principal.modules.id+'" class="nav nav-treeview">\
+                                        </ul>\
+                                        </li>';
+            }
+            beta = '<li id="principal'+principal.modules.id+'" class="nav-item has-treeview">\
+                                        <a href="#" class="nav-link">\
+                                          <i class="nav-icon fas fa-'+principal.modules.icone+'"></i>\
+                                          <p>\
+                                            '+principal.modules.name+'\
+                                            <i class="fas fa-angle-left right"></i>\
+                                          </p>\
+                                        </a>\
+                                        <ul id="modulo'+principal.modules.id+'" class="nav nav-treeview">\
+                                        </ul>\
+                                        </li>';           
+          });
+          $('#menuprincipal').append(limitaMenu);
+
+          $.each(response.authorizations,function(key,secundario){
+            $('#modulo'+secundario.modules.id).append('<li id="operacao'+secundario.operations.id+'" class="nav-item">\
+                                                      <a href="#!" class="nav-link">\
+                                                        <i class="nav-icon fas fa-'+secundario.operations.icone+'"></i>\
+                                                        <p>'+secundario.operations.name+'</p>\
+                                                      </a>\
+                                                    </li>'
+            );
+          });
     }
 
    });
 
-   $.ajax({
+   /* $.ajax({
     type:'GET',
     dataType:'json',
     url:'/menulayout',
@@ -261,11 +322,34 @@ $(document).ready(function(){
           }
 
           $('#menuprincipal').replaceWith('<ul id="menuprincipal" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"></ul>');
-          $.each(response.authorization,function(key,modulos){
-           
+          $.each(response.authorization,function(key,principal){
+            $('#menuprincipal').append('<li id="principal'+principal.modules.id+'" class="nav-item has-treeview">\
+                                        <a href="#" class="nav-link">\
+                                          <i class="nav-icon fas fa-'+principal.modules.icone+'"></i>\
+                                          <p>\
+                                            '+principal.modules.name+'\
+                                            <i class="fas fa-angle-left right"></i>\
+                                            <span class="badge badge-info right">'+principal.roules.name+'</span>\
+                                          </p>\
+                                        </a>\
+                                        <ul id="modulo'+principal.modules.id+'" class="nav nav-treeview">\
+                                        </ul>\
+                                        </li>\
+                                        '
+            );
           });
 
-           /* <li class="nav-item has-treeview">
+          $.each(response.authorization,function(key,secundario){
+            $('modulo'+secundario.modules.id).append('<li id="'+secundario.operations.id+'" class="nav-item">\
+                                                      <a href="#!" class="nav-link">\
+                                                        <i class="nav-icon fas fa-'+secundario.operations.icone+'"></i>\
+                                                        <p>'+secundario.operations.name+'</p>\
+                                                      </a>\
+                                                    </li>'
+            );
+          });
+
+           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
@@ -318,12 +402,12 @@ $(document).ready(function(){
                 </a>
               </li>
             </ul>
-          </li>  */
+          </li>  
 
 
     }
 
-   });
+   }); */
 
    
    

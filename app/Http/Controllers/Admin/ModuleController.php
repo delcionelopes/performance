@@ -182,25 +182,15 @@ class ModuleController extends Controller
         ]);
     }
 
-    public function storeOperations(Request $request, int $id){
-        $validator = Validator::make($request->all(),[
-            'operacoes' => ['required','array','min:1'],
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->errors()->getMessages(),
-            ]);
-        }else{
-
+    public function storeOperations(Request $request, int $id){  
             $module = $this->module->find($id);
             $module->operations()->sync($request->operacoes);  
                      
             return response()->json([
                 'status' => 200,
-                'message' => 'Operações vinculadas com sucesso!',
+                'message' => 'Operações atualizadas!',
             ]);
-        }
+      
     }
 
     protected function autoincModule(){
