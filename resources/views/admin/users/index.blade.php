@@ -14,7 +14,24 @@
             </div>
             <div class="modal-body form-horizontal">
                 <form id="addform" name="addform" class="form-horizontal" role="form" enctype="multipart/form-data">
-                    <ul id="saveform_errList"></ul>
+                    <ul id="saveform_errList"></ul>                
+            <div class="card-body">
+              <div class="card p-3" style="background-image: url('/storage/banner-docs.jpg')">
+                <div class="d-flex align-items-center">
+                    <!--arquivo de imagem-->
+                    <div class="form-group mb-3">                                                
+                       <div class="image">                            
+                            <img src="{{asset('storage/user.png')}}" class="addimgfoto rounded-circle" width="100" >     
+                        </div>
+                       <label for="">Foto</label>                        
+                       <span class="btn btn-none fileinput-button"><i class="fas fa-plus"></i>                          
+                          <input id="addimagem" type="file" name="imagem" class="btn btn-primary" accept="image/x-png,image/gif,image/jpeg">
+                       </span>                       
+                     </div>  
+                     <!--arquivo de imagem--> 
+                </div>
+              </div>
+            </div>
                     <div class="form-group mb-3">
                         <label for="">Nome</label>
                         <input type="text" class="name form-control">
@@ -40,17 +57,9 @@
                             <option value="{{$roule->id}}">{{$roule->name}}</option>
                             @endforeach
                         </select>
-                    </div>  
-                     <!--arquivo de imagem-->
-                    <div class="form-group mb-3">                                                
-                       <label for="">Foto do perfil</label>                        
-                       <span class="btn btn-default fileinput-button"><i class="fas fa-plus"></i>                          
-                          <input id="addimagem" type="file" name="imagem" accept="image/x-png,image/gif,image/jpeg">
-                       </span>                       
-                     </div>  
-                     <!--arquivo de imagem-->                                                      
+                    </div>                                                              
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-default addFechar_btn" data-dismiss="modal">Fechar</button>
                 <button type="submit" class="btn btn-primary add_user"><img id="imgadd" src="{{asset('storage/ajax-loader.gif')}}" style="display: none;" class="rounded-circle" width="20"> Salvar</button>
             </div>
             </form>
@@ -74,6 +83,23 @@
             <div class="modal-body form-horizontal">
                 <form id="editform" name="editfom" class="form-horizontal" role="form" enctype="multipart/form-data">
                     <ul id="updateform_errList"></ul>
+            <div class="card-body">
+              <div class="card p-3" style="background-image: url('/storage/banner-docs.jpg')">
+                <div class="d-flex align-items-center">
+                    <!--arquivo de imagem-->
+                    <div class="form-group mb-3">                                                
+                       <div class="image">                            
+                            <img src="{{asset('storage/user.png')}}" class="editimgfoto rounded-circle" width="100" >     
+                        </div>
+                       <label for="">Foto</label>                        
+                       <span class="btn btn-none fileinput-button"><i class="fas fa-plus"></i>                          
+                          <input id="upimagem" type="file" name="imagem" class="btn btn-primary" accept="image/x-png,image/gif,image/jpeg">
+                       </span>                       
+                     </div>  
+                     <!--arquivo de imagem--> 
+                </div>
+              </div>
+            </div>
                     <input type="hidden" id="edit_user_id">
                     <div class="form-group mb-3">
                         <label for="">Nome</label>
@@ -100,17 +126,9 @@
                             <option value="{{$roule->id}}">{{$roule->name}}</option>
                             @endforeach
                         </select>
-                    </div>              
-                     <!--arquivo de imagem-->
-                    <div class="form-group mb-3">                                                
-                       <label for="">Foto do perfil</label>                        
-                       <span class="btn btn-default fileinput-button"><i class="fas fa-plus"></i>                          
-                          <input id="upimagem" type="file" name="imagem" accept="image/x-png,image/gif,image/jpeg">
-                       </span>                       
-                     </div>  
-                     <!--arquivo de imagem-->                
+                    </div>                        
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-default editFechar_btn" data-dismiss="modal">Fechar</button>
                 <button type="submit" class="btn btn-primary update_user"><img id="imgedit" src="{{asset('storage/ajax-loader.gif')}}" style="display: none;" class="rounded-circle" width="20"> Atualizar</button>
             </div>
             </form>
@@ -245,6 +263,7 @@ $('#EditUserModal').on('shown.bs.modal',function(){
         var id = $(this).data("id");
         $('#editform').trigger('reset');
         $('#EditUserModal').modal('show');
+        $('.editimgfoto').replaceWith('<img src="{{asset('storage/user.png')}}" class="editimgfoto rounded-circle" width="100">');
 
         $.ajaxSetup({
             headers:{
@@ -256,11 +275,13 @@ $('#EditUserModal').on('shown.bs.modal',function(){
             dataType:'json',
             url:'/admin/users/user-edit/'+id,
             success:function(response){
-                if(response.status==200){                    
+                if(response.status==200){  
+                    var link = "{{asset('')}}"+"storage/";                  
                     $('#edit_user_id').val(response.user.id);
                     $('.name').val(response.user.name);                   
                     $('.email').val(response.user.email);
                     $('.roules').val(response.user.roules_id);
+                    $('.editimgfoto').attr('src',link+response.user.avatar);
                     if(response.user.enabled==1){
                     $('.enabled').attr('checked',true);
                     }else{
@@ -555,6 +576,144 @@ $('#EditUserModal').on('shown.bs.modal',function(){
             });
     });
     //fim ativa usuario
+
+     //upload da foto temporária
+         $(document).on('change','#addimagem',function(){  
+          
+            var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+            var fd = new FormData();
+            var files = $(this)[0].files;                      
+
+            if(files.length > 0){
+            // Append data 
+            fd.append('imagem',$(this)[0].files[0]);      
+            fd.append('_token',CSRF_TOKEN);
+            fd.append('_enctype','multipart/form-data');
+            fd.append('_method','put');      
+            
+        $.ajax({                      
+                type: 'POST',                             
+                url:'/admin/users/imgtemp-upload',                
+                dataType: 'json',            
+                data: fd,
+                cache: false,
+                processData: false,
+                contentType: false,                                                                                     
+                success: function(response){                              
+                    if(response.status==200){
+                        var arq = response.filepath; 
+                            arq = arq.toString();                  ;
+                        var linkimagem = '{{asset('')}}'+arq;                        
+                        var imagemnova = '<img src="'+linkimagem+'" class="addimgfoto rounded-circle" width="100" >';                        
+                        $(".addimgfoto").replaceWith(imagemnova);
+                    }   
+                }                                  
+            });
+        }
+        });   
+
+         $(document).on('change','#upimagem',function(){  
+          
+            var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+            var fd = new FormData();
+            var files = $(this)[0].files;                      
+
+            if(files.length > 0){
+            // Append data 
+            fd.append('imagem',$(this)[0].files[0]);      
+            fd.append('_token',CSRF_TOKEN);
+            fd.append('_enctype','multipart/form-data');
+            fd.append('_method','put');      
+            
+        $.ajax({                      
+                type: 'POST',                             
+                url:'/admin/users/imgtemp-upload',                
+                dataType: 'json',            
+                data: fd,
+                cache: false,
+                processData: false,
+                contentType: false,                                                                                     
+                success: function(response){                              
+                    if(response.status==200){                                                                       
+                        var arq = response.filepath; 
+                            arq = arq.toString();                  ;
+                        var linkimagem = '{{asset('')}}'+arq;                        
+                        var imagemnova = '<img src="'+linkimagem+'" class="editimgfoto rounded-circle" width="100" >';                        
+                        $(".editimgfoto").replaceWith(imagemnova);
+                    }   
+                }                                  
+            });
+        }
+        });   
+
+
+        $(document).on('click','.addFechar_btn',function(e){
+        e.preventDefault();
+        var CSRF_TOKEN  = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var files = $('#addimagem')[0].files;                      
+
+        if(files.length > 0){
+        var data = new FormData();
+            data.append('imagem',$('#addimagem')[0].files[0]);
+            data.append('_token',CSRF_TOKEN);
+            data.append('_enctype','multipart/form-data');
+            data.append('_method','delete');   
+             $.ajax({                      
+                type: 'POST',                             
+                url:'/admin/users/delete-img',                
+                dataType: 'json',            
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,                                                                                     
+                success: function(response){                              
+                    if(response.status==200){
+                    $('#saveform_errList').replaceWith('<ul id="saveform_errList"></ul>');                         
+                    location.replace('/admin/users/index');
+                } 
+                }                                  
+            });
+
+        }else{
+            //location.replace('/admin/users/index');
+        }
+
+    });
+
+    $(document).on('click','.editFechar_btn',function(e){
+        e.preventDefault();
+        var CSRF_TOKEN  = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var files = $('#upimagem')[0].files;                      
+
+        if(files.length > 0){
+        var data = new FormData();
+            data.append('imagem',$('#upimagem')[0].files[0]);
+            data.append('_token',CSRF_TOKEN);
+            data.append('_enctype','multipart/form-data');
+            data.append('_method','delete');   
+             $.ajax({                      
+                type: 'POST',                             
+                url:'/admin/users/delete-img',                
+                dataType: 'json',            
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,                                                                                     
+                success: function(response){                              
+                    if(response.status==200){
+                    $('#updateform_errList').replaceWith('<ul id="updateform_errList"></ul>');                         
+                    location.replace('/admin/users/index');
+                } 
+                }                                  
+            });
+
+        }else{
+            //location.replace('/admin/users/index');
+        }
+
+    });
+    //fim upload da foto temporária
+
 });
 //Fim escopo geral
 </script>

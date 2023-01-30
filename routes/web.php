@@ -58,7 +58,9 @@ use Illuminate\Support\Facades\Route;
             Route::get('user-edit/{id}',[UserController::class,'edit']);
             Route::put('user-update/{id}',[UserController::class,'update']);
             Route::put('user-store',[UserController::class,'store']);
-            Route::put('user-ativo/{id}',[UserController::class,'ativoUsuario']); 
+            Route::put('user-ativo/{id}',[UserController::class,'ativoUsuario']);
+            Route::put('imgtemp-upload',[UserController::class,'armazenarFotoTemp']);
+            Route::delete('delete-img',[UserController::class,'excluirfototemp']);
         });
 
 

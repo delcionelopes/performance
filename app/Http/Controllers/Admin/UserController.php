@@ -249,5 +249,34 @@ class UserController extends Controller
     }
 
 
+     public function armazenarFotoTemp(Request $request){       
+            $filePath="";
+            if($request->hasFile('imagem')){
+            $file = $request->file('imagem');                           
+            $fileName =  $file->getClientOriginalName();        
+            $storagePath = public_path().'/storage/temp/';
+            $filePath = 'storage/temp/'.$fileName;
+            $file->move($storagePath,$fileName);            
+            }
+            return response()->json([
+                'status' => 200,
+                'filepath' => $filePath,
+            ]);        
+    }
+
+    public function excluirfototemp(Request $request){
+         //exclui o arquivo temporário se houver
+                if($request->hasFile('imagem')){
+                    $file = $request->file('imagem');
+                    $filename = $file->getClientOriginalName();
+                    $antigoPath = public_path().'/storage/temp/'.$filename;
+                    if(file_exists($antigoPath)){
+                        unlink($antigoPath);
+                    }
+                }     
+        return response()->json([
+            'status' => 200,            
+        ]);
+    }
 
 }
