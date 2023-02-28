@@ -485,7 +485,7 @@
                     <h3 class="card-title">Usuários</h3>
 
                     <div class="card-tools">
-                      <span class="badge badge-danger">{{$users->count()}} Registro(s)</span>
+                      <span class="badge badge-danger"> Registro(s)</span>
                       <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                       </button>
                       <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
@@ -497,15 +497,15 @@
                     <ul class="users-list clearfix">
                       @foreach($users as $user)
                       <li>
-                        @if($user->avatar)
-                        <img src="{{asset('storage/'.$user->avatar)}}" alt="Foto de {{$user->name}}">
+                     {{--    @if($user->avatar)
+                        <img src="{{asset('dist/img/user8-128x128.jpg')}}" alt="Foto de {{$user->name}}">
                         <a class="users-list-name" href="#!">{{$user->name}}</a>
-                        <span class="users-list-date">{{$user->roule->name}}</span>
+                        <span class="users-list-date"></span>
                         @else
                         <img src="{{asset('storage/user.png')}}" alt="user">
                         <a class="users-list-name" href="#!">{{$user->name}}</a>
                         <span class="users-list-date">{{$user->roule->name}}</span>
-                        @endif
+                        @endif --}}
                       </li>
                       @endforeach                    
                     </ul>

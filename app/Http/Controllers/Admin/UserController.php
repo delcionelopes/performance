@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Roule;
-use App\Models\User;
+/* use App\Models\Roule;
+use App\Models\User; */
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    private $user;
-    private $roule;
+    
+    /*private $roule; */
 
-    public function __construct(User $user, Roule $roule)
+   /*  public function __construct(User $user, Roule $roule)
     {
         $this->user = $user;
         $this->roule = $roule;
-    }
+    } */
     /**
      * Display a listing of the resource.
      *
@@ -25,17 +26,19 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if(is_null($request->pesquisa)){
-            $users = $this->user->orderByDesc('id')->paginate(6);
-        }else{
-            $query = $this->user->query()
-                          ->where('name','LIKE','%'.strtoupper($request->pesquisa).'%');
-            $users = $query->orderByDesc('id')->paginate(6);
-        }
-        $roules = $this->roule->all();
+        
+            $response_users = Http::get('http://192.168.251.56:8501/docs/api/v1/users/');
+            //$response = Http::get('https://dummy.restapiexample.com/api/v1/employees');  //meu teste ok..          
+            //$response = Http::employees()->get('/api/v1/employees');                     //acessando api usando macro  ok..
+           
+            //dd($response);
+
+            $users = $response_users->body();
+            $response_roules = Http::get('http://192.168.251.56:8501/docs/api/v1/roles/');
+            dd($response_roules->body());
+      
         return view('admin.users.index',[
-            'users' => $users,
-            'roules' => $roules,
+            'users' => $users,           
         ]);
     }
 
@@ -57,7 +60,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+       /*  $validator = Validator::make($request->all(),[
             'name' => ['required','max:50'],
             'email' => ['required','email','unique:users','max:100'],
             'password' => ['required','min:8','max:15'],
@@ -105,7 +108,7 @@ class UserController extends Controller
                 'message' => 'Registro criado com sucesso!',
             ]);
             
-        }
+        } */
     }
 
     /**
@@ -127,11 +130,11 @@ class UserController extends Controller
      */
     public function edit(int $id)
     {        
-        $user = $this->user->find($id);            
+     /*    $user = $this->user->find($id);            
         return response()->json([
             'status' => 200,
             'user' => $user,           
-        ]);
+        ]); */
     }
 
     /**
@@ -143,7 +146,7 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $validator = Validator::make($request->all(),[
+        /* $validator = Validator::make($request->all(),[
             'name' => ['required','max:50'],
             'email' => ['required','email','max:100'],
             'password' => ['required','min:8','max:15'],
@@ -206,7 +209,7 @@ class UserController extends Controller
             ]);
         }
             
-        }
+        } */
 
     }
 
@@ -218,26 +221,26 @@ class UserController extends Controller
      */
     public function destroy(int $id)
     {
-        $user = $this->user->find($id);
+        /* $user = $this->user->find($id);
         $user->delete();
         return response()->json([
             'status' => 200,
             'message' => 'Registro excluído com sucesso!',
-        ]);
+        ]); */
     }
 
     protected function autoincUser(){
-        $user = $this->user->orderByDesc('id')->first();
+        /* $user = $this->user->orderByDesc('id')->first();
         if($user){
             $codigo = $user->id;
         }else{
             $codigo = 0;
         }
-        return $codigo+1;
+        return $codigo+1; */
     }
 
     public function ativoUsuario(Request $request,$id){
-        $ativo = $request->input('ativo');
+        /* $ativo = $request->input('ativo');
         $data = ['enabled' => $ativo];
         $user = $this->user->find($id);
         $user->update($data);
@@ -245,12 +248,12 @@ class UserController extends Controller
         return response()->json([
             'user' => $u,
             'status'=> 200,
-        ]);
+        ]); */
     }
 
 
      public function armazenarFotoTemp(Request $request){       
-            $filePath="";
+          /*   $filePath="";
             if($request->hasFile('imagem')){
             $file = $request->file('imagem');                           
             $fileName =  $file->getClientOriginalName();        
@@ -261,12 +264,12 @@ class UserController extends Controller
             return response()->json([
                 'status' => 200,
                 'filepath' => $filePath,
-            ]);        
+            ]);   */      
     }
 
     public function excluirfototemp(Request $request){
          //exclui o arquivo temporário se houver
-                if($request->hasFile('imagem')){
+         /*        if($request->hasFile('imagem')){
                     $file = $request->file('imagem');
                     $filename = $file->getClientOriginalName();
                     $antigoPath = public_path().'/storage/temp/'.$filename;
@@ -276,7 +279,7 @@ class UserController extends Controller
                 }     
         return response()->json([
             'status' => 200,            
-        ]);
+        ]); */
     }
 
 }

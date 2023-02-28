@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
     Auth::routes();
-    Route::group(['middleware' => ['auth']],function(){ //as rotas abaixo estão sob autenticação
+   // Route::group(['middleware' => ['auth']],function(){ //as rotas abaixo estão sob autenticação
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/master', [HomeController::class, 'master'])->name('master');
@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Route;
 
     });
 
-});
+//});
 
 
 

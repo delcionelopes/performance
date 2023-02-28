@@ -44,7 +44,7 @@
             <i class="fas fa-users mr-2"></i> Usuários
             <span id="menu_user" class="float-right text-muted text-sm">registro(s)</span>
           </a>
-          <div class="dropdown-divider"></div>
+          {{-- <div class="dropdown-divider"></div>
           <a href="{{route('admin.modules.index')}}" class="dropdown-item">
             <i class="fas fa-folder mr-2"></i> Módulos
             <span id="menu_module" class="float-right text-muted text-sm">registro(s)</span>
@@ -57,7 +57,7 @@
           <div class="dropdown-divider"></div>
           <a href="{{route('admin.roules.index')}}" class="dropdown-item">
             <i class="fas fa-th-large mr-2"></i> Regras & Perfis            
-          </a>
+          </a> --}}
         </div>
       </li>      
     </ul>
@@ -69,13 +69,13 @@
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <img src="{{asset('storage/'.auth()->user()->avatar)}}" alt="User Avatar" width="30" height="30" class="mr-3 img-circle">          
+          {{-- <img src="{{asset('storage/'.auth()->user()->avatar)}}" alt="User Avatar" width="30" height="30" class="mr-3 img-circle">           --}}
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
           <a href="#" class="dropdown-item">
            <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item">
-            <i class="fas fa-user mr-2"></i>{{auth()->user()->name}}
+            {{-- <i class="fas fa-user mr-2"></i>{{auth()->user()->name}} --}}
           </a>
           </a>          
           <div class="dropdown-divider"></div>
@@ -105,7 +105,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img id="imgusuario" src="{{asset('storage/ajax-loader.gif')}}" class="img-circle elevation-2" alt="User Image">
+          {{-- <img id="imgusuario" src="{{asset('storage/ajax-loader.gif')}}" class="img-circle elevation-2" alt="User Image"> --}}
         </div>
         <div class="info">
           <a href="#!" class="nomeusuario d-block"Aguarde...></a>
@@ -172,7 +172,7 @@
 
 <script type="text/javascript">
 
-
+/* 
 $(document).ready(function(){  
    $.ajaxSetup({
                     headers:{
@@ -254,5 +254,5 @@ $(document).ready(function(){
 
   
 });
-
+ */
 </script>
